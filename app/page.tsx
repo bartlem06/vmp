@@ -165,11 +165,13 @@ export default function Home() {
 
         <section
           id="track"
-          className="track-record section-with-inner photo-section"
+          className="track-record section-with-inner photo-section has-image"
           style={
             {
               "--section-bg-url":
-                'url("https://natureconservancy-h.assetsadobe.com/is/image/content/dam/tnc/nature/en/photos/TNC23005_230602_00381.jpg?crop=0%2C179%2C1600%2C840&wid=1600&hei=840&scl=1.3333333333333333")',
+                'url("/wind.png")',
+              "--section-bg-size": "100% auto",
+              "--section-bg-position": "center top",
             } as CSSProperties
           }
         >
@@ -245,14 +247,14 @@ export default function Home() {
             </ul>
           </div>
         </section>
-
         <section
           id="contact"
-          className="contact-section photo-section"
+          className="contact-section photo-section has-image"
           style={
             {
-              "--section-bg-url":
-                'url("https://frontend-cdn.solarreviews.com/solar-farm.jpg")',
+              "--section-bg-url": 'url("/solar-farm.jpg")',
+              "--section-bg-size": "100% auto",
+              "--section-bg-position": "center top",
             } as CSSProperties
           }
         >
