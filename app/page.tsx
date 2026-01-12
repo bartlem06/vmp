@@ -66,6 +66,7 @@ export default function Home() {
     email: "",
     message: "",
   });
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const [status, setStatus] = useState("");
 
   useEffect(() => {
@@ -78,9 +79,135 @@ export default function Home() {
       document.documentElement.style.setProperty("--sticky-header-offset", `${height}px`);
     };
 
-    updateOffset();
-    window.addEventListener("resize", updateOffset);
-    return () => window.removeEventListener("resize", updateOffset);
+    const handleResize = () => {
+      updateOffset();
+      if (window.innerWidth >= 900) {
+        setIsNavOpen(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const sections = Array.from(document.querySelectorAll<HTMLElement>(".photo-section.has-image"));
+    if (!sections.length) {
+      return;
+    }
+
+    const imageSizeCache = new Map<string, { width: number; height: number }>();
+    let cancelled = false;
+    let resizeRaf: number | null = null;
+
+    const parseBackgroundUrl = (section: HTMLElement) => {
+      const rawValue =
+        section.style.getPropertyValue("--section-bg-url") ||
+        getComputedStyle(section).getPropertyValue("--section-bg-url");
+      const match = rawValue.match(/url\((?:"|')?(.*?)(?:"|')?\)/);
+      return match?.[1] ?? null;
+    };
+
+    const loadImageSize = (url: string) =>
+      new Promise<{ width: number; height: number } | null>((resolve) => {
+        if (imageSizeCache.has(url)) {
+          resolve(imageSizeCache.get(url)!);
+          return;
+        }
+
+        const img = new Image();
+        img.onload = () => {
+          const size = { width: img.naturalWidth, height: img.naturalHeight };
+          imageSizeCache.set(url, size);
+          resolve(size);
+        };
+        img.onerror = () => resolve(null);
+        img.src = url;
+      });
+
+    const numericFromValue = (value: string | undefined, axis: "width" | "height", section: HTMLElement) => {
+      if (!value || value === "auto") return null;
+      if (value.endsWith("px")) return parseFloat(value);
+      if (value.endsWith("%")) {
+        const pct = parseFloat(value) / 100;
+        const rect = section.getBoundingClientRect();
+        return pct * (axis === "width" ? rect.width : rect.height);
+      }
+      return null;
+    };
+
+    const computeRenderedHeight = (
+      section: HTMLElement,
+      naturalSize: { width: number; height: number },
+      backgroundSize: string,
+    ) => {
+      const rect = section.getBoundingClientRect();
+      const ratio = naturalSize.height / naturalSize.width;
+      const sizeParts = backgroundSize.split(/\s+/);
+
+      if (sizeParts.length === 1 && (backgroundSize === "cover" || backgroundSize === "contain")) {
+        const widthScale = rect.width / naturalSize.width;
+        const heightScale = rect.height / naturalSize.height;
+        const scale = backgroundSize === "cover" ? Math.max(widthScale, heightScale) : Math.min(widthScale, heightScale);
+        return naturalSize.height * scale;
+      }
+
+      const [rawWidth, rawHeight = "auto"] = sizeParts;
+      const resolvedWidth = numericFromValue(rawWidth, "width", section);
+      const resolvedHeight = numericFromValue(rawHeight, "height", section);
+
+      if (typeof resolvedHeight === "number") return resolvedHeight;
+      if (typeof resolvedWidth === "number") return resolvedWidth * ratio;
+      return naturalSize.height;
+    };
+
+    const evaluateBackgrounds = async () => {
+      const photoSections = Array.from(document.querySelectorAll<HTMLElement>(".photo-section.has-image"));
+
+      const results = await Promise.all(
+        photoSections.map(async (section) => {
+          const url = parseBackgroundUrl(section);
+          if (!url) return false;
+
+          const naturalSize = await loadImageSize(url);
+          if (!naturalSize) return false;
+
+          const computedStyle = getComputedStyle(section);
+          const sizeTokens = computedStyle.backgroundSize.split(",");
+          const targetSize = sizeTokens[sizeTokens.length - 1]?.trim();
+          if (!targetSize) return false;
+
+          const renderedHeight = computeRenderedHeight(section, naturalSize, targetSize);
+          const sectionHeight = section.getBoundingClientRect().height;
+
+          return renderedHeight + 1 < sectionHeight;
+        }),
+      );
+
+      const shouldDisable = results.some(Boolean);
+
+      if (cancelled) return;
+      document.documentElement.classList.toggle("background-images-disabled", shouldDisable);
+    };
+
+    const handleResize = () => {
+      if (resizeRaf) {
+        cancelAnimationFrame(resizeRaf);
+      }
+      resizeRaf = requestAnimationFrame(evaluateBackgrounds);
+    };
+
+    evaluateBackgrounds();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      cancelled = true;
+      if (resizeRaf) {
+        cancelAnimationFrame(resizeRaf);
+      }
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -107,12 +234,35 @@ export default function Home() {
             priority
           />
         </Link>
-        <nav className="primary-nav">
-          <a href="#about">About Us</a>
-          <a href="#services">Services</a>
-          <a href="#track">Track Record</a>
-          <a href="#network">Our Network</a>
-          <a href="#contact">Contact</a>
+        <button
+          type="button"
+          className="nav-toggle"
+          aria-label="Toggle navigation"
+          aria-expanded={isNavOpen}
+          aria-controls="primary-nav"
+          onClick={() => setIsNavOpen((open) => !open)}
+        >
+          <span className="nav-toggle__bar" aria-hidden="true" />
+          <span className="nav-toggle__bar" aria-hidden="true" />
+          <span className="nav-toggle__bar" aria-hidden="true" />
+        </button>
+        <nav id="primary-nav" className={`primary-nav ${isNavOpen ? "is-open" : ""}`}
+        >
+          <a href="#about" onClick={() => setIsNavOpen(false)}>
+            About Us
+          </a>
+          <a href="#services" onClick={() => setIsNavOpen(false)}>
+            Services
+          </a>
+          <a href="#track" onClick={() => setIsNavOpen(false)}>
+            Track Record
+          </a>
+          <a href="#network" onClick={() => setIsNavOpen(false)}>
+            Our Network
+          </a>
+          <a href="#contact" onClick={() => setIsNavOpen(false)}>
+            Contact
+          </a>
         </nav>
       </header>
 
