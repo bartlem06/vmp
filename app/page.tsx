@@ -18,8 +18,8 @@ const trackStats = ["25+ years of experience", "30+ countries"];
 
 const transactionAdvisory = [
   "Acquisition by an institutional investor of a 400MW wind project in North Macedonia from a local developer.",
-  "EUR XXm early stage risk capital for Al-Rajef wind power plant in Jordan.",
-  "EUR XXm in arranging risk capital for water desalination start-up in Italy.",
+  "Early stage risk capital for Al-Rajef wind power plant in Jordan.",
+  "Arranging risk capital for water desalination start-up in Italy.",
   "Refinancing for Hungarian animal and plant crop producer DFH Kft.",
   "For our historical track record in cooperation with other advisors see also www.traficonadvisors.eu and www.cratone.com.",
 ];
