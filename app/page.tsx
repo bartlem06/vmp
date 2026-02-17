@@ -123,7 +123,7 @@ export default function Home() {
           return;
         }
 
-        const img = new Image();
+        const img = new window.Image();
         img.onload = () => {
           const size = { width: img.naturalWidth, height: img.naturalHeight };
           imageSizeCache.set(url, size);
