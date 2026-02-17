@@ -527,22 +527,45 @@ section {
 
   .site-header {
     position: static;
-    align-items: stretch;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "logo toggle"
+      "nav nav";
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 8px;
     padding: 10px 14px;
     box-shadow: none;
   }
 
   .logo-block {
+    grid-area: logo;
     align-self: center;
+    justify-self: start;
   }
 
   .nav-toggle {
     display: inline-flex;
-    align-self: flex-end;
+    grid-area: toggle;
+    align-self: center;
+    justify-self: end;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 38px;
+    height: 34px;
+    padding: 6px;
+    border-radius: 4px;
+  }
+
+  .nav-toggle__bar {
+    margin: 0;
   }
 
   .primary-nav {
+    grid-area: nav;
     width: 100%;
     flex-direction: column;
     align-items: center;
@@ -555,6 +578,13 @@ section {
     pointer-events: none;
     transform: translateY(-8px);
     transition: max-height 0.25s ease, opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .photo-section.has-image {
+    background-image: linear-gradient(180deg, rgba(239, 245, 255, 0.85) 0%, #ffffff 55%, rgba(245, 249, 255, 0.75) 100%);
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   .primary-nav.is-open {
@@ -595,7 +625,7 @@ section {
   .section-heading {
     justify-content: flex-start;
     text-align: left;
-    margin-bottom: 12px;
+    margin: 22px 0 18px;
   }
 
   .section-heading h2 {
@@ -672,12 +702,13 @@ section {
   }
 
   .track-subsection {
-    margin-bottom: 22px;
+    margin-top: 8px;
+    margin-bottom: 28px;
   }
 
   .track-subsection h3 {
     font-size: 1.05rem;
-    margin-bottom: 10px;
+    margin: 10px 0 14px;
     letter-spacing: 0.05em;
     line-height: 1.35;
   }
