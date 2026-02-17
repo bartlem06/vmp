@@ -5,43 +5,50 @@ import Link from "next/link";
 import { ChangeEvent, CSSProperties, FormEvent, useEffect, useState } from "react";
 
 const ourWork = [
-  "VMP provides advisory services in structuring and arranging investment capital.",
+  "VMP provides advisory services in arranging and structuring investment capital, M&A, business development.",
   "We are an advisory company (as opposed to agents, intermediaries). We go deep into client’s financing needs, help to understand, refine goals, capital requirements, then structure and arrange capital. We lead negotiations with investors, financiers on behalf of and in the best interest of our clients.",
   "We cover all types of financing from equity to mezzanine to senior debt.",
-  "We work globally with focus on Europe.",
-  "We do not exclude any sectors, except World Bank’s black list.",
-  "We have contacts to and working co-operation with many sources of capital coming from all corners of the world: banking and non-banking debt providers, PE and VC funds, family houses, investment banks, private investors, asset managers, developers, in particular those with focus on renewable energy.",
+  "We work globally with focus on Europe, including Poland.",
+  "We focus on sectors related to energy transition and circular economy.",
+  "We have contacts to and working co-operation with many sources of capital coming from all corners of the world: banking and non-banking debt providers, PE and VC funds, development finance institutions, family offices, investment banks, private investors, asset managers, developers, in particular those with focus on renewable-energy transition sectors.",
+  "We also assist in setting up business presence in Poland, including establishing joint ventures, arranging local partners for foreign investors, especially in the energy transition sectors.",
 ];
 
-const trackStats = ["20+ years of experience", "30+ countries"];
+const trackStats = ["25+ years of experience", "30+ countries"];
+
+const transactionAdvisory = [
+  "Acquisition by an institutional investor of a 400MW wind project in North Macedonia from a local developer.",
+  "EUR XXm early stage risk capital for Al-Rajef wind power plant in Jordan.",
+  "EUR XXm in arranging risk capital for water desalination start-up in Italy.",
+  "Refinancing for Hungarian animal and plant crop producer DFH Kft.",
+  "For our historical track record in cooperation with other advisors see also www.traficonadvisors.eu and www.cratone.com.",
+];
+
+const businessAndProjectDevelopment = [
+  "Assisting a European investor in establishment several JV companies in the energy sector in Poland with planned investments to the tune of EUR XXXm.",
+  "Involved in a company about development of XXX MW PV and battery energy storage projects for an EU-based institutional investor.",
+];
 
 const fundManagement = [
   "EUR 280m investment management in 14 countries of CEE, equity, mezz, debt capital. Fund was successfully exited with positive returns – see: www.ifu.dk",
-  "Co-founded and managed EUR XXm closed-end-fund in Poland to invest in PV energy – fund was exited and closed with positive returns. The fund used to operate as part of a Polish TFI, see: https://www.eitfi.pl/aktualnosci/czyste-zyski-z-zielonej-energii-eques-fotowoltaica-fiz-rozlicza-sie-z-inwestorami-2904 and https://www.eitfi.pl/",
-];
-
-const arrangingFinancing = [
-  "EUR XXm early stage risk capital for Al-Rajef wind power plant in Jordan, see: https://alcazarenegy.com/alcazar-energys-al-rajef-wind-farm-arwf-achieves-cod/",
-  "Arranged EUR XXm in risk capital for water desalination start-up in Italy, see: https://en.solarisaquae.com/",
-  "Arranged EUR XXm refinancing for Hungarian animal and plant crop producer DFH Kft, see: https://www.firstfarms.dk/en/",
-  "For our track record in cooperation with other advisors see also www.traficonadvisors.eu and www.cratone.com",
+  "Co-founded and managed EUR XXm closed-end-fund in Poland to invest in PV energy – fund was exited and closed with positive returns. The fund of a Polish TFI.",
 ];
 
 const networkPartners = [
   {
     prefix: "",
     linkText: "www.traficonadvisors.eu",
-    href: "http://www.traficonadvisors.eu",
+    href: "https://www.traficonadvisors.eu",
     suffix: " for Czech Republic, Slovakia, Austria, Germany",
   },
   {
     prefix: "",
     linkText: "www.cratone.com",
-    href: "http://cratone.com",
+    href: "https://www.cratone.com",
     suffix: " for Turkey, Middle East, Southern Europe, Africa",
   },
   {
-    prefix: "For investments in developing countries we have excellent contacts to EDFIs, see: ",
+    prefix: "For investments in developing countries we have contacts to EDFIs, see: ",
     linkText: "https://www.edfi.eu/",
     href: "https://www.edfi.eu/",
     suffix: "",
@@ -56,7 +63,7 @@ const networkPartners = [
     prefix: "",
     linkText: null,
     suffix:
-      "We have access and working cooperation with numerous renewable energy developers, investors, assets managers",
+      "We have access and working cooperation with numerous renewable energy developers, investors, funds, asset managers.",
   },
 ];
 
@@ -281,15 +288,15 @@ export default function Home() {
             <p className="eyebrow">WHO WE ARE</p>
             <h1>VMP is a Polish financing advisory boutique.</h1>
             <p>
-              VMP’s owner is Piotr Lemieszek – a Polish financial advisor with over 20 years
-              international experience in arranging financing, investment management, business advisory
-              services.
+              VMP’s owner is Piotr Lemieszek – a Polish financial advisor with over 25 years
+              international experience in transaction advisory, project finance, investment management,
+              business development.
             </p>
             <p>
               Piotr’s professional track record includes several years in Arthur Andersen, 13 years fund
               management for IFU (www.ifu.dk) – a European development finance fund, 4 years investment
-              management of closed-end-fund investing in PV, 10 years in arranging financing as freelance
-              consultant with a global list of clients
+              management of closed-end-fund investing in PV, around 15 years in arranging financing as
+              freelance consultant with a global list of clients
             </p>
             <p>Piotr holds Executive MBA (2001) from Warsaw University-University of Illinois and Urbana</p>
           </div>
@@ -338,9 +345,9 @@ export default function Home() {
             </div>
 
             <div className="track-subsection">
-              <h3>FUND MANAGEMENT</h3>
+              <h3>TRANSACTION ADVISORY</h3>
               <div className="track-list">
-                {fundManagement.map((item) => (
+                {transactionAdvisory.map((item) => (
                   <article className="track-item" key={item}>
                     <span className="track-item__icon" aria-hidden="true">
                       <span>➜</span>
@@ -352,9 +359,23 @@ export default function Home() {
             </div>
 
             <div className="track-subsection">
-              <h3>ARRANGING FINANCING</h3>
+              <h3>BUSINESS AND PROJECT DEVELOPMENT</h3>
               <div className="track-list">
-                {arrangingFinancing.map((item) => (
+                {businessAndProjectDevelopment.map((item) => (
+                  <article className="track-item" key={item}>
+                    <span className="track-item__icon" aria-hidden="true">
+                      <span>➜</span>
+                    </span>
+                    <p>{item}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+
+            <div className="track-subsection">
+              <h3>FUND MANAGEMENT</h3>
+              <div className="track-list">
+                {fundManagement.map((item) => (
                   <article className="track-item" key={item}>
                     <span className="track-item__icon" aria-hidden="true">
                       <span>➜</span>
@@ -373,7 +394,7 @@ export default function Home() {
               <h2>OUR NETWORK</h2>
             </div>
             <p className="network-intro">
-              VMP co-operates with similar consulting and capital sourcing companies, including:
+              VMP co-operates with similar capital sourcing companies, including:
             </p>
             <ul className="network-list">
               {networkPartners.map((partner, index) => (
